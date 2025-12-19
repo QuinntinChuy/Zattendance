@@ -40,7 +40,7 @@
     height: 100px;
     margin: 0 auto 1.5rem;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,18 +177,18 @@
 
 .login-card .form-control:focus {
     outline: none;
-    border-color: var(--wood-dark);
+    border-color: #000000;
     box-shadow: 0 0 0 3px rgba(75, 46, 30, 0.1);
 }
 
 .login-card .alert-danger {
     background: #f5e6e3;
-    border-color: var(--danger);
+    border-color: #000000;
     color: var(--wood-text-dark);
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
-    border-left: 4px solid var(--danger);
+    border-left: 4px solid #000000;
 }
 
 /* Responsive Styles */

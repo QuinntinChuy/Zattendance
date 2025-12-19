@@ -143,7 +143,7 @@
 
 .form-input .form-control:focus {
     outline: none;
-    border-color: var(--wood-accent);
+    border-color: #000000;
     box-shadow: 0 0 0 3px rgba(156, 107, 67, 0.1);
 }
 
@@ -245,7 +245,7 @@
     padding: 1rem;
     background: var(--wood-text-light);
     border-radius: 8px;
-    border-left: 4px solid var(--wood-accent);
+    border-left: 4px solid #000000;
 }
 
 .bulk-import-info h3 {

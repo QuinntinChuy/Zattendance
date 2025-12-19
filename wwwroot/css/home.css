@@ -12,6 +12,13 @@
     gap: 2rem;
 }
 
+.home-cards-grid-user {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 3rem;
+}
+
 .home-card {
     background: var(--wood-text-light);
     padding: 2rem;
@@ -25,6 +32,10 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+}
+
+.home-cards-grid-user .home-card {
+    padding: 3rem;
 }
 
 .home-card::before {
@@ -46,7 +57,7 @@
 .home-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(107, 79, 63, 0.2);
-    border-color: var(--wood-accent);
+    border-color: #000000;
 }
 
 .home-card-icon {
@@ -63,11 +74,23 @@
     box-shadow: 0 4px 12px rgba(75, 46, 30, 0.3);
 }
 
+.home-cards-grid-user .home-card-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
 .home-card h3 {
     color: var(--wood-dark);
     margin-bottom: 1rem;
     font-size: 1.4rem;
     font-weight: 600;
+}
+
+.home-cards-grid-user .home-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
 }
 
 .home-card p {
@@ -77,6 +100,11 @@
     opacity: 0.9;
 }
 
+.home-cards-grid-user .home-card p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
 .home-card .btn {
     width: 100%;
     display: flex;
@@ -84,6 +112,11 @@
     justify-content: center;
     gap: 0.5rem;
     margin-top: auto;
+}
+
+.home-cards-grid-user .home-card .btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
 }
 
 /* Responsive Styles */
@@ -96,6 +129,12 @@
     .home-cards-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
+    }
+
+    .home-cards-grid-user {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        gap: 2rem;
     }
 
     .home-card {

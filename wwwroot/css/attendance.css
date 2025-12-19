@@ -162,7 +162,7 @@
 }
 
 .action-buttons .btn-primary {
-    background: #000000; /* Pure Black */
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     color: var(--wood-text-light); /* White text */
 }
 
@@ -173,7 +173,7 @@
 }
 
 .action-buttons .btn-secondary {
-    background: var(--wood-accent);
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     color: var(--wood-text-light);
 }
 
@@ -227,7 +227,7 @@
 }
 
 .btn-add-member {
-    background: var(--wood-accent);
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     color: var(--wood-text-light);
     border: none;
     padding: 0.75rem 1.5rem;
@@ -299,7 +299,7 @@
 
 /* Action Buttons - Updated for Members tab */
 .btn-view {
-    background: var(--wood-medium); /* Medium Oak #7A4A2E - secondary icons/actions */
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     color: var(--wood-text-light);
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -322,8 +322,8 @@
 }
 
 .btn-edit {
-    background: var(--wood-accent);
-    color: var(--wood-text-light);
+    background: linear-gradient(135deg, #C19A6B 0%, #D4B896 30%, #E8D4C0 50%, #D4B896 70%, #C19A6B 100%);
+    color: var(--wood-text-dark);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
@@ -338,10 +338,10 @@
 }
 
 .btn-edit:hover {
-    background: var(--wood-medium);
+    background: linear-gradient(135deg, #D4B896 0%, #E8D4C0 30%, #F3E9DC 50%, #E8D4C0 70%, #D4B896 100%);
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: var(--wood-text-light);
+    color: var(--wood-text-dark);
 }
 
 /* Sort Icon */
@@ -397,7 +397,7 @@ table thead th {
 .btn-pagination:hover:not(:disabled) {
     background: var(--wood-medium);
     color: var(--wood-text-light);
-    border-color: var(--wood-medium);
+    border-color: #000000;
 }
 
 .btn-pagination:disabled {
@@ -408,13 +408,13 @@ table thead th {
 .btn-pagination.active {
     background: var(--wood-accent); /* Warm Light Wood - active indicator */
     color: var(--wood-text-light);
-    border-color: var(--wood-accent);
+    border-color: #000000;
     font-weight: 600;
 }
 
 /* Delete Button */
 .btn-delete {
-    background: var(--danger); /* Reddish brown #8B5547 - danger/delete actions */
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     color: var(--wood-text-light);
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -430,7 +430,7 @@ table thead th {
 }
 
 .btn-delete:hover {
-    background: var(--wood-dark); /* Dark Walnut #4B2E1E - darker on hover for delete */
+    background: var(--wood-medium);
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     color: var(--wood-text-light);
@@ -705,7 +705,7 @@ table thead th {
 /* Modal Styles - Merged from modal.css */
 .modal-content {
     background: var(--wood-text-light); /* Off-White - modal content background */
-    border: 1px solid #e0e0e0;
+    border: 1px solid #000000;
     border-radius: 8px;
 }
 
@@ -745,7 +745,7 @@ table thead th {
 }
 
 .modal-footer {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #000000;
     padding: 1rem 1.5rem;
     background: #f5f5f5; /* Light grey background for footer */
     border-radius: 0 0 12px 12px;

@@ -1,7 +1,7 @@
 /* Modal Styles */
 .modal-content {
     background: var(--wood-text-light); /* Off-White - modal content background */
-    border: 1px solid #e0e0e0;
+    border: 1px solid #000000;
     border-radius: 8px;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .modal-footer {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #000000;
     padding: 1rem 1.5rem;
     background: #f5f5f5; /* Light grey background for footer */
     border-radius: 0 0 12px 12px;

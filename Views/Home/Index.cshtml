@@ -12,7 +12,7 @@
             Welcome to The World Mission Society Church of God attendance management system.
         </p>
 
-        <div class="home-cards-grid">
+        <div class="home-cards-grid @(!User.IsInRole("Administrator") ? "home-cards-grid-user" : "")">
             <div class="home-card">
                 <div class="home-card-icon">
                     <i class="fas fa-clipboard-check"></i>
