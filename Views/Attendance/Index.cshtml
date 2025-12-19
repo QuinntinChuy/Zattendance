@@ -1,0 +1,142 @@
+@model AttendanceIndexViewModel
+@{
+    ViewData["Title"] = "Attendance";
+}
+<link rel="stylesheet" href="~/css/attendance.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-clipboard-check"></i> Attendance Management</h2>
+    </div>
+
+    @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+    {
+        <div class="attendance-add-member">
+            <a href="@Url.Action("AddMember", "Attendance")" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add New Member</a>
+        </div>
+    }
+
+    <div class="schedule-selector">
+        <label for="scheduleSelect">Select Schedule:</label>
+        <select id="scheduleSelect" class="form-control" onchange="location.href='@Url.Action("Index", "Attendance")?scheduleId=' + this.value">
+            <option value="">-- Select a Schedule --</option>
+            @foreach (var schedule in Model.AllSchedules)
+            {
+                @if (Model.Schedule?.Id == schedule.Id)
+                {
+                    <option value="@schedule.Id" selected>
+                        @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
+                        @if (schedule.Group != null)
+                        {
+                            <text> (@schedule.Group.Name)</text>
+                        }
+                    </option>
+                }
+                else
+                {
+                    <option value="@schedule.Id">
+                        @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
+                        @if (schedule.Group != null)
+                        {
+                            <text> (@schedule.Group.Name)</text>
+                        }
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    @if (Model.Schedule != null)
+    {
+        <div class="card attendance-schedule-card">
+            <h3 class="attendance-schedule-title">@Model.Schedule.Title</h3>
+            <p class="attendance-schedule-text">
+                <strong>Date:</strong> @Model.Schedule.Date.ToString("MMMM dd, yyyy")
+            </p>
+            @if (Model.Schedule.Group != null)
+            {
+                <p class="attendance-schedule-text">
+                    <strong>Group:</strong> @Model.Schedule.Group.Name
+                </p>
+            }
+        </div>
+
+        @if (Model.Members.Any())
+        {
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Member Name</th>
+                            <th>Group</th>
+                            <th>Status</th>
+                            @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+                            {
+                                <th>Actions</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var member in Model.Members)
+                        {
+                            var attendance = Model.Attendances.FirstOrDefault(a => a.MemberId == member.Id);
+                            <tr>
+                                <td>@member.FullName</td>
+                                <td>@(member.Group?.Name ?? "N/A")</td>
+                                <td>
+                                    @if (attendance != null)
+                                    {
+                                        <span class="badge badge-@attendance.Status.ToString().ToLower()">
+                                            @attendance.Status.ToString()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="attendance-not-recorded">Not Recorded</span>
+                                    }
+                                </td>
+                                @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <form asp-action="MarkAttendance" method="post" class="attendance-form-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="scheduleId" value="@Model.Schedule.Id" />
+                                            <input type="hidden" name="memberId" value="@member.Id" />
+                                            <div class="attendance-buttons">
+                                                <button type="submit" name="status" value="@AttendanceStatus.Present" 
+                                                    class="attendance-btn present @(attendance?.Status == AttendanceStatus.Present ? "active" : "")">
+                                                    <i class="fas fa-check-circle"></i> Present
+                                                </button>
+                                                <button type="submit" name="status" value="@AttendanceStatus.Late" 
+                                                    class="attendance-btn late @(attendance?.Status == AttendanceStatus.Late ? "active" : "")">
+                                                    <i class="fas fa-clock"></i> Late
+                                                </button>
+                                                <button type="submit" name="status" value="@AttendanceStatus.Absent" 
+                                                    class="attendance-btn absent @(attendance?.Status == AttendanceStatus.Absent ? "active" : "")">
+                                                    <i class="fas fa-times-circle"></i> Absent
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center attendance-empty-message">
+                <p>No members found for this schedule.</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center attendance-empty-message">
+            <p>Please select a schedule to view attendance.</p>
+        </div>
+    }
+</div>
+

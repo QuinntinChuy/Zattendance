@@ -1,0 +1,51 @@
+@model List<Member>
+@{
+    ViewData["Title"] = "Members";
+}
+<link rel="stylesheet" href="~/css/members.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-users"></i> Church Members</h2>
+        @if (User.IsInRole("Administrator"))
+        {
+            <a href="@Url.Action("BulkImport", "Members")" class="btn btn-primary"><i class="fas fa-upload"></i> Bulk Import</a>
+        }
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Member ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Group</th>
+                        <th>Date Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var member in Model)
+                    {
+                        <tr>
+                            <td>@(member.MemberNumber ?? "N/A")</td>
+                            <td>@member.FullName</td>
+                            <td>@member.Gender</td>
+                            <td>@(member.Group?.Name ?? "N/A")</td>
+                            <td>@member.DateJoined.ToString("MMMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center members-empty-message">
+            <p>No members found.</p>
+        </div>
+    }
+</div>
+

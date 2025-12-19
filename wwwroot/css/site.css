@@ -1,0 +1,482 @@
+/* Woods Theme - Natural Aesthetic */
+:root {
+    /* Primary Color Palette */
+    --wood-dark: #6B4F3F;        /* Aged Cedar - Primary (dark base) */
+    --wood-medium: #7A5C45;      /* Weathered Brown - Secondary */
+    --wood-accent: #9C6B43;      /* Earth Clay - Accent color */
+    --wood-bg: #F4F1EC;          /* Rice Paper White - Background */
+    --wood-surface: #F4F1EC;     /* Rice Paper White - Surface / Cards */
+    --wood-text-dark: #6B4F3F;   /* Aged Cedar - Text (dark) */
+    --wood-text-light: #F4F1EC;  /* Rice Paper White - Text (light) */
+    
+    /* Derived Colors */
+    --wood-light: #9C6B43;       /* Lighter accent */
+    --wood-darker: #6B4F3F;      /* Darker primary */
+    --wood-border: #7A5C45;      /* Weathered Brown - Border color */
+    --success: #6E7F58;          /* Moss Green - Success */
+    --warning: #9C6B43;          /* Earth Clay - Warning */
+    --danger: #8B5547;           /* Reddish brown */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--wood-bg) 0%, var(--wood-surface) 100%);
+    color: var(--wood-text-dark);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    padding: 1rem 0;
+    box-shadow: 0 4px 6px rgba(107, 79, 63, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-brand h1 {
+    color: var(--wood-text-light);
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+}
+
+.nav-brand h1 i {
+    font-size: 1.6rem;
+    color: var(--wood-accent);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.nav-brand p {
+    color: var(--wood-surface);
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-menu a {
+    color: var(--wood-text-light);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-menu a i {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.nav-menu a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.nav-menu a:hover i {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.btn-logout {
+    background: var(--wood-accent) !important;
+    color: var(--wood-text-light) !important;
+    font-weight: 600;
+}
+
+.btn-logout:hover {
+    background: var(--wood-medium) !important;
+    color: var(--wood-text-light) !important;
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    min-height: calc(100vh - 200px);
+}
+
+/* Cards */
+.card {
+    background: var(--wood-surface);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(107, 79, 63, 0.15);
+    border: 2px solid var(--wood-border);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--wood-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card-header h2 {
+    color: var(--wood-dark);
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.btn i {
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: var(--wood-accent);
+    color: var(--wood-text-light);
+}
+
+.btn-primary:hover {
+    background: var(--wood-medium);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(156, 107, 67, 0.3);
+}
+
+.btn-success {
+    background: var(--success);
+    color: var(--wood-text-light);
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: var(--wood-text-dark);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: var(--wood-text-light);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--wood-text-dark);
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--wood-border);
+    border-radius: 8px;
+    background: var(--wood-text-light);
+    color: var(--wood-text-dark);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--wood-accent);
+    box-shadow: 0 0 0 3px rgba(156, 107, 67, 0.2);
+}
+
+select.form-control {
+    cursor: pointer;
+}
+
+/* Tables */
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 2px solid var(--wood-border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--wood-text-light);
+}
+
+thead {
+    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    color: var(--wood-text-light);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--wood-border);
+}
+
+th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+tbody tr:hover {
+    background: var(--wood-surface);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-present {
+    background: var(--success);
+    color: var(--wood-text-light);
+}
+
+.badge-late {
+    background: var(--warning);
+    color: var(--wood-text-dark);
+}
+
+.badge-absent {
+    background: var(--danger);
+    color: var(--wood-text-light);
+}
+
+/* Attendance Status Buttons */
+.attendance-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.attendance-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--wood-border);
+    border-radius: 6px;
+    background: var(--wood-text-light);
+    color: var(--wood-text-dark);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.attendance-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-btn.present {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.attendance-btn.present.active {
+    background: var(--success);
+    color: var(--wood-text-light);
+}
+
+.attendance-btn.late {
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.attendance-btn.late.active {
+    background: var(--warning);
+    color: var(--wood-text-dark);
+}
+
+.attendance-btn.absent {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.attendance-btn.absent.active {
+    background: var(--danger);
+    color: var(--wood-text-light);
+}
+
+/* Schedule Selector */
+.schedule-selector {
+    background: var(--wood-text-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border: 2px solid var(--wood-border);
+}
+
+.schedule-selector label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--wood-text-dark);
+}
+
+.schedule-selector select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--wood-border);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    color: var(--wood-text-light);
+    padding: 2rem 0;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Alerts */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background: #f0f5e8;
+    border-color: var(--success);
+    color: var(--wood-text-dark);
+}
+
+.alert-danger {
+    background: #f5e6e3;
+    border-color: var(--danger);
+    color: var(--wood-text-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-menu {
+        width: 100%;
+        justify-content: center;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.mt-3 {
+    margin-top: 1.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.gap-2 {
+    gap: 1rem;
+}
+

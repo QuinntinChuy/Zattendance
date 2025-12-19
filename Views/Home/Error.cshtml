@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Error";
+}
+<link rel="stylesheet" href="~/css/error.css" />
+
+<div class="card text-center">
+    <div class="error-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h2 class="error-title">An Error Occurred</h2>
+    <p class="error-message">
+        We're sorry, but something went wrong. Please try again later.
+    </p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Return to Home</a>
+</div>
+

@@ -1,0 +1,30 @@
+/* Schedules Page Styles */
+.schedules-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.schedules-delete-form {
+    display: inline;
+}
+
+.schedules-empty-message {
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: var(--wood-text-dark);
+    opacity: 0.7;
+}
+
+.validation-error {
+    color: var(--danger);
+}
+
+.cancel-btn {
+    background: var(--wood-medium);
+    color: var(--wood-text-light);
+}
+
+
+
+

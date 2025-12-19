@@ -1,0 +1,11 @@
+/* Members Page Styles */
+.members-empty-message {
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: var(--wood-text-dark);
+    opacity: 0.7;
+}
+
+
+
+

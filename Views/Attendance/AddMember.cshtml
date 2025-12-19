@@ -1,0 +1,56 @@
+@model AddMemberViewModel
+@{
+    ViewData["Title"] = "Add New Member";
+}
+<link rel="stylesheet" href="~/css/add-member.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-user-plus"></i> Add New Member</h2>
+    </div>
+
+    <form asp-action="AddMember" method="post">
+        <div class="form-group">
+            <label asp-for="FirstName">First Name</label>
+            <input asp-for="FirstName" class="form-control" required />
+            <span asp-validation-for="FirstName" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName">Last Name</label>
+            <input asp-for="LastName" class="form-control" required />
+            <span asp-validation-for="LastName" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gender">Gender</label>
+            <select asp-for="Gender" class="form-control" required>
+                <option value="">-- Select Gender --</option>
+                <option value="@Gender.Male">Male</option>
+                <option value="@Gender.Female">Female</option>
+            </select>
+            <span asp-validation-for="Gender" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GroupId">Group</label>
+            <select asp-for="GroupId" class="form-control" required>
+                <option value="">-- Select Group --</option>
+                @if (ViewBag.Groups != null)
+                {
+                    @foreach (var group in ViewBag.Groups as List<Group> ?? new List<Group>())
+                    {
+                        <option value="@group.Id">@group.Name</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="GroupId" class="validation-error"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add Member</button>
+            <a href="@Url.Action("Index", "Attendance")" class="btn cancel-btn"><i class="fas fa-times"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+

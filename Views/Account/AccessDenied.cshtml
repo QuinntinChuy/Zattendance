@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+<link rel="stylesheet" href="~/css/access-denied.css" />
+
+<div class="card text-center">
+    <div class="error-icon">
+        <i class="fas fa-lock"></i>
+    </div>
+    <h2 class="access-denied-title">Access Denied</h2>
+    <p class="access-denied-message">
+        You do not have permission to access this page.
+    </p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Return to Home</a>
+</div>
+

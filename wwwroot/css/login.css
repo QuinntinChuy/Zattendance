@@ -1,0 +1,85 @@
+/* Login Page Styles */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-card {
+    background: var(--wood-surface);
+    border-radius: 16px;
+    padding: 3rem;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(107, 79, 63, 0.15);
+    border: 3px solid var(--wood-border);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--wood-accent), var(--success));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    box-shadow: 0 6px 20px rgba(156, 107, 67, 0.3);
+}
+
+.login-header h1 {
+    color: var(--wood-dark);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.login-header p {
+    color: var(--wood-medium);
+    font-size: 0.95rem;
+}
+
+.login-header p.subtitle {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--wood-dark);
+}
+
+.validation-error {
+    color: var(--danger);
+}
+
+.remember-me-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-list {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.login-btn-full {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.login-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--wood-border);
+    text-align: center;
+    color: var(--wood-text-dark);
+    font-size: 0.9rem;
+}
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Church of God World Mission Society</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h1><i class="fas fa-hands-praying"></i> Church of God</h1>
+                    <p>World Mission Society</p>
+                </div>
+                <ul class="nav-menu">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li><a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="@Url.Action("Index", "Attendance")"><i class="fas fa-clipboard-check"></i> Attendance</a></li>
+                        <li><a href="@Url.Action("Index", "Members")"><i class="fas fa-users"></i> Members</a></li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li><a href="@Url.Action("Index", "Schedules")"><i class="fas fa-calendar-alt"></i> Schedules</a></li>
+                            <li><a href="@Url.Action("Index", "Groups")"><i class="fas fa-layer-group"></i> Groups</a></li>
+                        }
+                        <li><a href="@Url.Action("Logout", "Account")" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Church of God World Mission Society. All rights reserved.</p>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

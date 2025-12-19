@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Bulk Import Members";
+}
+<link rel="stylesheet" href="~/css/members.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-upload"></i> Bulk Import Members</h2>
+    </div>
+
+    <div style="margin-bottom: 2rem; padding: 1rem; background: var(--wood-text-light); border-radius: 8px; border-left: 4px solid var(--wood-accent);">
+        <h3 style="color: var(--wood-dark); margin-bottom: 0.5rem; font-size: 1.1rem;">
+            <i class="fas fa-info-circle"></i> Import Format
+        </h3>
+        <p style="margin: 0; color: var(--wood-text-dark); line-height: 1.6;">
+            Paste your data in tab-separated format: <strong>[Member ID] [Tab] [Full Name] [Tab] [Gender]</strong><br />
+            Each line represents one member. Gender should be either "Male" or "Female".<br />
+            Example: <code>M05-180504-17253	Mark Varens Alcaraz Laguerta	Male</code>
+        </p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="BulkImport" method="post">
+        <div class="form-group">
+            <label for="defaultGroupId">Default Group (Optional)</label>
+            <select name="defaultGroupId" id="defaultGroupId" class="form-control">
+                <option value="">Auto-assign based on gender</option>
+                @foreach (var group in ViewBag.Groups as List<Group> ?? new List<Group>())
+                {
+                    <option value="@group.Id">@group.Name</option>
+                }
+            </select>
+            <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.5rem;">
+                If not specified, members will be assigned to Adult groups matching their gender.
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="memberData">Member Data</label>
+            <textarea name="memberData" id="memberData" class="form-control" rows="25" 
+                placeholder="Paste your member data here. Format: Member ID [Tab] Full Name [Tab] Gender&#10;&#10;Example:&#10;M05-180504-17253	Mark Varens Alcaraz Laguerta	Male&#10;M05-241226-127797	Benhur Anthony Gimpayan Palad	Male"></textarea>
+            <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.5rem;">
+                Copy and paste your data from the spreadsheet. Duplicate members (by Member ID or Name) will be skipped.
+            </small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Import Members</button>
+            <a href="@Url.Action("Index", "Members")" class="btn cancel-btn"><i class="fas fa-times"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+

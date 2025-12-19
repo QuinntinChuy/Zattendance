@@ -1,0 +1,38 @@
+/* Attendance Page Styles */
+.attendance-add-member {
+    margin-bottom: 2rem;
+}
+
+.attendance-schedule-card {
+    background: var(--wood-text-light);
+    margin-bottom: 2rem;
+}
+
+.attendance-schedule-title {
+    color: var(--wood-dark);
+    margin-bottom: 0.5rem;
+}
+
+.attendance-schedule-text {
+    color: var(--wood-text-dark);
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.attendance-form-inline {
+    display: inline;
+}
+
+.attendance-not-recorded {
+    color: var(--wood-medium);
+}
+
+.attendance-empty-message {
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: var(--wood-medium);
+}
+
+
+
+

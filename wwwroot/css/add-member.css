@@ -1,0 +1,13 @@
+/* Add Member Page Styles */
+.validation-error {
+    color: var(--danger);
+}
+
+.cancel-btn {
+    background: var(--wood-medium);
+    color: var(--wood-text-light);
+}
+
+
+
+
