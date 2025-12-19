@@ -28,7 +28,7 @@
             @if (User.IsInRole("User") || User.IsInRole("Administrator"))
             {
                 <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-                    Add Members
+                    <i class="fas fa-user-plus"></i> Add Member
                 </button>
             }
         </div>
@@ -59,7 +59,7 @@
             @if (User.IsInRole("User") || User.IsInRole("Administrator"))
             {
                 <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addPositionHolderModal">
-                    Add Position Holder
+                    <i class="fas fa-user-tie"></i> Add Position Holder
                 </button>
             }
         </div>
@@ -90,7 +90,7 @@
             @if (User.IsInRole("Administrator"))
             {
                 <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addGroupNameModal">
-                    Add Group Name
+                    <i class="fas fa-layer-group"></i> Add Group Name
                 </button>
             }
         </div>
