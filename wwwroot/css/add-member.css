@@ -8,6 +8,34 @@
     color: var(--wood-text-light);
 }
 
+/* Form helper text */
+.form-helper-text,
+small.form-helper {
+    color: var(--wood-text-dark);
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .d-flex.gap-2 .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-helper-text {
+        font-size: 0.8rem;
+    }
+}
+
 
 
 

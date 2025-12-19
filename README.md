@@ -1,4 +1,4 @@
-# Church of God World Mission Society - Attendance System
+# The World Mission Society Church of God - Attendance System
 
 A beautiful web-based attendance management system with a woods-themed aesthetic (light brown color scheme).
 
@@ -77,5 +77,5 @@ The application features a beautiful woods-themed design with:
 
 ## License
 
-© 2024 Church of God World Mission Society. All rights reserved.
+© 2024 The World Mission Society Church of God. All rights reserved.
 # Zattendance

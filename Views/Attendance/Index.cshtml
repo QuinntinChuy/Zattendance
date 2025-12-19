@@ -4,7 +4,6 @@
     var activeTab = ViewBag.ActiveTab ?? "Members";
 }
 <link rel="stylesheet" href="~/css/attendance.css" />
-<link rel="stylesheet" href="~/css/modal.css" />
 
 <div class="card">
     <!-- Navigation Tabs -->
@@ -152,8 +151,8 @@
 
     @if (Model.Schedule != null)
     {
-        <div class="attendance-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-            <div class="form-group" style="margin-bottom: 0;">
+        <div class="attendance-filters">
+            <div class="form-group">
                 <label for="filterGroup">Filter by Group:</label>
                 <select id="filterGroup" class="form-control" onchange="updateFilters()">
                     <option value="">-- All Groups --</option>
@@ -166,7 +165,7 @@
                 </select>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
+            <div class="form-group">
                 <label for="filterPosition">Filter by Position:</label>
                 <select id="filterPosition" class="form-control" onchange="updateFilters()">
                     <option value="">-- All Positions --</option>
@@ -197,89 +196,89 @@
         </div>
     }
 
-    @if (activeTab == "GroupName")
-    {
-        <!-- Group Name Tab: Show all groups -->
-        var groupsWithDetails = ViewBag.GroupsWithDetails;
-        
+        @if (activeTab == "GroupName")
+        {
+            <!-- Group Name Tab: Show all groups -->
+            var groupsWithDetails = ViewBag.GroupsWithDetails;
+            
         <!-- Group Name Table -->
-        <div class="table-container">
-            <table id="groupNameTable">
-                <thead>
-                    <tr>
+                <div class="table-container">
+                    <table id="groupNameTable">
+                        <thead>
+                            <tr>
                         <th>Group Name</th>
                         <th>Leader Name</th>
                         <th>Total Members</th>
                         <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
+                            </tr>
+                        </thead>
+                        <tbody>
                     @if (groupsWithDetails != null && ((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Any())
                     {
-                        @foreach (dynamic groupDetail in groupsWithDetails)
-                        {
-                            <tr>
-                                <td>@groupDetail.Group.Name</td>
-                                <td>@(groupDetail.Leader != null ? groupDetail.Leader.FullName : "N/A")</td>
-                                <td>@groupDetail.TotalMembers</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a href="@Url.Action("Index", "Groups")" class="btn btn-edit">
-                                            <i class="fas fa-users"></i> Edit Members
-                                        </a>
-                                        @if (User.IsInRole("Administrator"))
-                                        {
-                                            <form asp-action="Delete" asp-controller="Groups" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this group?');">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@groupDetail.Group.Id" />
-                                                <button type="submit" class="btn btn-delete">
-                                                    <i class="fas fa-trash"></i> Delete Group
-                                                </button>
-                                            </form>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
+                            @foreach (dynamic groupDetail in groupsWithDetails)
+                            {
+                                <tr>
+                                    <td>@groupDetail.Group.Name</td>
+                                    <td>@(groupDetail.Leader != null ? groupDetail.Leader.FullName : "N/A")</td>
+                                    <td>@groupDetail.TotalMembers</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="@Url.Action("Index", "Groups")" class="btn btn-edit">
+                                                <i class="fas fa-users"></i> Edit Members
+                                            </a>
+                                            @if (User.IsInRole("Administrator"))
+                                            {
+                                                <form asp-action="Delete" asp-controller="Groups" method="post" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this group?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@groupDetail.Group.Id" />
+                                                    <button type="submit" class="btn btn-delete">
+                                                        <i class="fas fa-trash"></i> Delete Group
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+            }
+            else
+            {
                         <tr>
                             <td colspan="4" class="text-center">No data inputted</td>
                         </tr>
                     }
                 </tbody>
             </table>
-        </div>
-    }
+                </div>
+            }
     else if (activeTab == "Members")
-    {
+        {
         <!-- Member Table -->
-        <div class="table-container">
+            <div class="table-container">
             <table id="membersTable">
-                <thead>
-                    <tr>
+                    <thead>
+                        <tr>
                         <th>Full Name</th>
                         <th>Life Number</th>
                         <th>Gender</th>
                         <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @if (Model.Members != null && Model.Members.Any())
                     {
                         @foreach (var member in Model.Members)
                         {
                             <tr>
                                 <td>@member.FullName</td>
-                                <td>@(member.MemberNumber ?? "N/A")</td>
+                                    <td>@(member.MemberNumber ?? "N/A")</td>
                                 <td>@member.Gender</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
-                                            <i class="fas fa-eye"></i> View
-                                        </a>
-                                        <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Information">
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Information">
                                             <i class="fas fa-edit"></i> Edit Information
                                         </a>
                                     </div>
@@ -298,7 +297,7 @@
         </div>
     }
     else if (activeTab == "PositionHolder")
-    {
+                                        {
         <!-- Position Holder Table -->
         <div class="table-container">
             <table id="positionHolderTable">
@@ -321,26 +320,26 @@
                                 <td>@(member.Position ?? "N/A")</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
-                                            <i class="fas fa-eye"></i> View
-                                        </a>
-                                        <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Position">
-                                            <i class="fas fa-edit"></i> Edit Position
-                                        </a>
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Position">
+                                                <i class="fas fa-edit"></i> Edit Position
+                                            </a>
                                     </div>
                                 </td>
                             </tr>
-                        }
-                    }
-                    else
-                    {
+            }
+        }
+        else
+        {
                         <tr>
                             <td colspan="4" class="text-center">No data inputted</td>
                         </tr>
                     }
                 </tbody>
             </table>
-        </div>
+            </div>
     }
     else if (Model.Schedule == null)
     {
@@ -390,7 +389,7 @@
                             <span class="validation-error" id="positionHolderPositionError"></span>
                         </div>
 
-                        <div id="addPositionHolderErrors" class="alert alert-danger" style="display: none;"></div>
+                        <div id="addPositionHolderErrors" class="alert alert-danger hidden"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> SAVE</button>
@@ -545,7 +544,7 @@
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
-                            <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.25rem;">
+                            <small class="form-helper-text">
                                 Examples: Male - john mark fernandez smith | Female - jane marie fernandez smith
                             </small>
                             <span class="validation-error" id="genderError"></span>
@@ -572,7 +571,7 @@
                             <span class="validation-error" id="positionError"></span>
                         </div>
 
-                        <div id="addMemberErrors" class="alert alert-danger" style="display: none;"></div>
+                        <div id="addMemberErrors" class="alert alert-danger hidden"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn cancel-btn" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>

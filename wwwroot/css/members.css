@@ -186,6 +186,88 @@
     .form-label {
         margin-bottom: 0.25rem;
     }
+
+    /* Bulk Import */
+    .bulk-import-info {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .bulk-import-info h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .bulk-import-info p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    .btn-submit {
+        min-width: auto;
+        width: 100%;
+    }
+
+    /* Header Actions */
+    .header-actions {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .bulk-import-info h3 {
+        font-size: 0.95rem;
+    }
+
+    .bulk-import-info p {
+        font-size: 0.85rem;
+    }
+}
+
+/* Bulk Import Info Box */
+.bulk-import-info {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--wood-text-light);
+    border-radius: 8px;
+    border-left: 4px solid var(--wood-accent);
+}
+
+.bulk-import-info h3 {
+    color: var(--wood-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.bulk-import-info p {
+    margin: 0;
+    color: var(--wood-text-dark);
+    line-height: 1.6;
+}
+
+/* Form helper text */
+.form-helper-text,
+small.form-helper {
+    color: var(--wood-text-dark);
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
 }
 
 

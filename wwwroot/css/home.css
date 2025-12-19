@@ -8,7 +8,7 @@
 
 .home-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
 }
 
@@ -21,6 +21,10 @@
     box-shadow: 0 2px 8px rgba(107, 79, 63, 0.1);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .home-card::before {
@@ -49,14 +53,14 @@
     width: 60px;
     height: 60px;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--wood-accent), var(--success));
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    color: white;
+    margin: 0 auto 1.5rem auto;
+    color: var(--wood-text-light); /* Off-White icons */
     font-size: 1.8rem;
-    box-shadow: 0 4px 12px rgba(156, 107, 67, 0.3);
+    box-shadow: 0 4px 12px rgba(75, 46, 30, 0.3);
 }
 
 .home-card h3 {
@@ -79,5 +83,56 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    margin-top: auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .home-welcome-text {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .home-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .home-card {
+        padding: 1.5rem;
+    }
+
+    .home-card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .home-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .home-card p {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-card {
+        padding: 1rem;
+    }
+
+    .home-card-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+
+    .home-card h3 {
+        font-size: 1.1rem;
+    }
 }
 

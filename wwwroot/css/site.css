@@ -26,7 +26,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--wood-bg); /* Soft Beige - main background */
+    background: #FFFFFF; /* Soft Beige - main background */
     color: var(--wood-text-dark); /* Pure Black - text */
     min-height: 100vh;
     line-height: 1.6;
@@ -34,12 +34,13 @@ body {
 
 /* Navigation */
 .navbar {
-    background: var(--wood-dark); /* Dark Walnut - main header, top navigation background */
+    background: linear-gradient(to bottom, #2a1810 0%, #5a3728 50%, #2a1810 100%);
     padding: 1rem 0;
-    box-shadow: 0 4px 6px rgba(75, 46, 30, 0.3);
+    box-shadow: 0 4px 6px rgba(75, 46, 30, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 2px solid rgba(75, 46, 30, 0.5);
 }
 
 .nav-container {
@@ -49,7 +50,55 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    position: relative;
+    width: 100%;
+}
+
+.nav-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+/* Hamburger Menu Button */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    gap: 0.375rem;
+    z-index: 1001;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.nav-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--wood-text-light);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.nav-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.nav-toggle:hover span {
+    background: var(--wood-accent);
 }
 
 .nav-brand h1 {
@@ -82,6 +131,7 @@ body {
     gap: 1.5rem;
     align-items: center;
     flex-wrap: wrap;
+    transition: all 0.3s ease;
 }
 
 .nav-menu a {
@@ -120,7 +170,7 @@ body {
 }
 
 .btn-logout {
-    background: var(--wood-accent) !important;
+    background: transparent !important;
     color: var(--wood-text-light) !important;
     font-weight: 600;
 }
@@ -207,7 +257,7 @@ main {
 
 /* Cards */
 .card {
-    background: var(--wood-medium); /* Medium Oak - section backgrounds, cards */
+    background: linear-gradient(135deg, #F3E9DC 0%, #FAF5EF 30%, #FFFFFF 50%, #FAF5EF 70%, #F3E9DC 100%);
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -216,18 +266,32 @@ main {
 }
 
 .card-header {
+    background: linear-gradient(135deg, #C19A6B 0%, #D4B896 30%, #E8D4C0 50%, #D4B896 70%, #C19A6B 100%);
     border-bottom: 2px solid var(--wood-border);
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 1.5rem 2rem;
+    margin: -2rem -2rem 1.5rem -2rem;
+    border-radius: 12px 12px 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 }
 
 .card-header h2 {
-    color: var(--wood-text-light); /* Off-White - headings */
+    color: var(--wood-text-dark); /* Pure Black - headings for light background */
     font-size: 1.8rem;
     margin: 0;
     font-weight: 700;
@@ -258,8 +322,8 @@ main {
 }
 
 .btn-primary {
-    background: var(--wood-accent);
-    color: var(--wood-text-light);
+    background: #000000; /* Pure Black */
+    color: var(--wood-text-light); /* White text */
 }
 
 .btn-primary:hover {
@@ -335,7 +399,19 @@ table {
 }
 
 thead {
-    background: var(--wood-dark); /* Dark Walnut - table header */
+    background: linear-gradient(135deg, #2a1810 0%, #5a3728 30%, #7a4a2e 50%, #5a3728 70%, #2a1810 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+thead::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(193, 154, 107, 0.4), transparent);
 }
 
 th, td {
@@ -469,11 +545,13 @@ tbody tr:last-child td {
 
 /* Footer */
 footer {
-    background: var(--wood-dark); /* Dark Walnut - footer background */
+    background: linear-gradient(to top, #2a1810 0%, #5a3728 50%, #2a1810 100%);
     color: var(--wood-text-light);
     padding: 2rem 0;
     margin-top: 4rem;
     text-align: center;
+    box-shadow: 0 -4px 6px rgba(75, 46, 30, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-top: 2px solid rgba(75, 46, 30, 0.5);
 }
 
 .footer-content {
@@ -504,30 +582,195 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+    /* Navigation */
     .nav-container {
-        flex-direction: column;
-        gap: 1rem;
+        flex-wrap: nowrap;
+        padding: 0 1rem;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .nav-brand {
+        order: 1;
+        flex: 0 0 auto;
+    }
+
+    .nav-brand h1 {
+        font-size: 1.5rem;
+    }
+
+    .nav-brand p {
+        font-size: 0.85rem;
+    }
+
+    /* Show hamburger button on mobile - positioned on the right */
+    .nav-toggle {
+        display: flex;
+        order: 2;
+        flex: 0 0 auto;
+        margin-left: auto;
     }
 
     .nav-menu {
+        order: 3;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to bottom, #2a1810 0%, #5a3728 50%, #2a1810 100%);
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        border-top: 2px solid rgba(75, 46, 30, 0.5);
+    }
+
+    /* Show menu when active */
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-menu li {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu a {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border-radius: 0;
+        justify-content: flex-start;
+    }
+
+    .nav-menu a:hover {
+        background: var(--wood-medium);
+        transform: none;
+    }
+
+    .btn-logout {
+        width: 100%;
+    }
+
+    /* Dropdown menu adjustments for mobile */
+    .nav-dropdown {
+        width: 100%;
+    }
+
+    .nav-dropdown-toggle {
+        width: 100%;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        border-radius: 0;
+    }
+
+    .nav-dropdown-menu {
+        position: static;
+        width: 100%;
+        margin-top: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: rgba(122, 74, 46, 0.3);
+        padding: 0;
+    }
+
+    .nav-dropdown-menu .dropdown-item {
+        padding-left: 3rem;
+    }
+
+    /* Main Content */
+    main {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+
+    /* Cards */
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.9rem;
         width: 100%;
         justify-content: center;
     }
 
-    main {
+    .btn-sm {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    /* Forms */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        padding: 0.625rem;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    /* Tables */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -1rem;
         padding: 0 1rem;
     }
 
-    .card {
-        padding: 1.5rem;
-    }
-
     table {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        min-width: 600px;
     }
 
     th, td {
-        padding: 0.75rem 0.5rem;
+        padding: 0.625rem 0.5rem;
+        white-space: nowrap;
+    }
+
+    thead th {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .nav-brand h1 {
+        font-size: 1.3rem;
+    }
+
+    .card-header h2 {
+        font-size: 1.2rem;
+    }
+
+    table {
+        font-size: 0.75rem;
+        min-width: 500px;
+    }
+
+    th, td {
+        padding: 0.5rem 0.375rem;
+    }
+
+    .btn {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.875rem;
     }
 }
 
