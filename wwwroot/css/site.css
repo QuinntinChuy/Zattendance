@@ -1,20 +1,20 @@
 /* Woods Theme - Natural Aesthetic */
 :root {
     /* Primary Color Palette */
-    --wood-dark: #6B4F3F;        /* Aged Cedar - Primary (dark base) */
-    --wood-medium: #7A5C45;      /* Weathered Brown - Secondary */
-    --wood-accent: #9C6B43;      /* Earth Clay - Accent color */
-    --wood-bg: #F4F1EC;          /* Rice Paper White - Background */
-    --wood-surface: #F4F1EC;     /* Rice Paper White - Surface / Cards */
-    --wood-text-dark: #6B4F3F;   /* Aged Cedar - Text (dark) */
-    --wood-text-light: #F4F1EC;  /* Rice Paper White - Text (light) */
+    --wood-dark: #4B2E1E;        /* Dark Walnut - headers, footer, navigation */
+    --wood-medium: #7A4A2E;      /* Medium Oak - section backgrounds, cards */
+    --wood-accent: #C19A6B;      /* Warm Light Wood - highlights, dividers, icons */
+    --wood-bg: #F3E9DC;          /* Soft Beige - main background */
+    --wood-surface: #7A4A2E;     /* Medium Oak - Surface / Cards */
+    --wood-text-dark: #000000;   /* Pure Black - text areas, content blocks */
+    --wood-text-light: #FFFFFF;  /* Off-White - primary text, headings, icons */
     
     /* Derived Colors */
-    --wood-light: #9C6B43;       /* Lighter accent */
-    --wood-darker: #6B4F3F;      /* Darker primary */
-    --wood-border: #7A5C45;      /* Weathered Brown - Border color */
+    --wood-light: #C19A6B;       /* Warm Light Wood - Lighter accent */
+    --wood-darker: #4B2E1E;      /* Dark Walnut - Darker primary */
+    --wood-border: #C19A6B;      /* Warm Light Wood - Border color */
     --success: #6E7F58;          /* Moss Green - Success */
-    --warning: #9C6B43;          /* Earth Clay - Warning */
+    --warning: #C19A6B;          /* Warm Light Wood - Warning */
     --danger: #8B5547;           /* Reddish brown */
 }
 
@@ -26,17 +26,17 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--wood-bg) 0%, var(--wood-surface) 100%);
-    color: var(--wood-text-dark);
+    background: var(--wood-bg); /* Soft Beige - main background */
+    color: var(--wood-text-dark); /* Pure Black - text */
     min-height: 100vh;
     line-height: 1.6;
 }
 
 /* Navigation */
 .navbar {
-    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    background: var(--wood-dark); /* Dark Walnut - main header, top navigation background */
     padding: 1rem 0;
-    box-shadow: 0 4px 6px rgba(107, 79, 63, 0.3);
+    box-shadow: 0 4px 6px rgba(75, 46, 30, 0.3);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -65,12 +65,12 @@ body {
 
 .nav-brand h1 i {
     font-size: 1.6rem;
-    color: var(--wood-accent);
+    color: var(--wood-text-light); /* Primary icons - nav icons use Off-White on Dark Walnut */
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .nav-brand p {
-    color: var(--wood-surface);
+    color: var(--wood-text-light); /* Off-White */
     font-size: 0.9rem;
     margin: 0;
     opacity: 0.9;
@@ -96,19 +96,27 @@ body {
     gap: 0.5rem;
 }
 
+.nav-menu li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
 .nav-menu a i {
     font-size: 1rem;
     opacity: 0.9;
 }
 
 .nav-menu a:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--wood-accent); /* Warm Light Wood - icon hover state */
     transform: translateY(-2px);
 }
 
 .nav-menu a:hover i {
     opacity: 1;
     transform: scale(1.1);
+    color: var(--wood-text-light);
 }
 
 .btn-logout {
@@ -123,6 +131,72 @@ body {
     transform: translateY(-2px);
 }
 
+/* Navbar Dropdown Styles */
+.nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-dropdown-toggle {
+    background: transparent;
+    border: none;
+    color: var(--wood-text-light);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.nav-dropdown-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-dropdown-toggle i {
+    font-size: 0.75rem;
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background: var(--wood-text-light); /* Off-White */
+    border: 2px solid var(--wood-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    min-width: 220px;
+    padding: 0.5rem 0;
+    z-index: 1000;
+    list-style: none;
+}
+
+.nav-dropdown-menu .dropdown-item {
+    color: var(--wood-text-dark); /* Pure Black */
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-dropdown-menu .dropdown-item:hover {
+    background: var(--wood-medium); /* Medium Oak */
+    color: var(--wood-text-light); /* Off-White */
+}
+
+.nav-dropdown-menu .dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+
 /* Main Content */
 main {
     max-width: 1200px;
@@ -133,11 +207,11 @@ main {
 
 /* Cards */
 .card {
-    background: var(--wood-surface);
+    background: var(--wood-medium); /* Medium Oak - section backgrounds, cards */
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(107, 79, 63, 0.15);
+    box-shadow: 0 4px 15px rgba(75, 46, 30, 0.15);
     border: 2px solid var(--wood-border);
 }
 
@@ -153,7 +227,7 @@ main {
 }
 
 .card-header h2 {
-    color: var(--wood-dark);
+    color: var(--wood-text-light); /* Off-White - headings */
     font-size: 1.8rem;
     margin: 0;
     font-weight: 700;
@@ -222,7 +296,7 @@ main {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--wood-text-dark);
+    color: var(--wood-text-light); /* Off-White - headings */
     font-weight: 600;
 }
 
@@ -231,8 +305,8 @@ main {
     padding: 0.75rem;
     border: 2px solid var(--wood-border);
     border-radius: 8px;
-    background: var(--wood-text-light);
-    color: var(--wood-text-dark);
+    background: var(--wood-text-light); /* Off-White - form inputs */
+    color: var(--wood-text-dark); /* Pure Black - text in form inputs */
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -257,12 +331,11 @@ select.form-control {
 table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--wood-text-light);
+    background: var(--wood-text-light); /* Off-White - table text boxes */
 }
 
 thead {
-    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
-    color: var(--wood-text-light);
+    background: var(--wood-dark); /* Dark Walnut - table header */
 }
 
 th, td {
@@ -271,14 +344,19 @@ th, td {
     border-bottom: 1px solid var(--wood-border);
 }
 
-th {
+thead th {
+    color: var(--wood-text-light); /* Off-White - table header text */
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.9rem;
 }
 
+tbody td {
+    color: var(--wood-text-dark); /* Pure Black - table text */
+}
+
 tbody tr:hover {
-    background: var(--wood-surface);
+    background: var(--wood-medium); /* Medium Oak */
 }
 
 tbody tr:last-child td {
@@ -321,8 +399,8 @@ tbody tr:last-child td {
     padding: 0.5rem 1rem;
     border: 2px solid var(--wood-border);
     border-radius: 6px;
-    background: var(--wood-text-light);
-    color: var(--wood-text-dark);
+    background: var(--wood-text-light); /* Off-White - table text boxes */
+    color: var(--wood-text-dark); /* Pure Black - text */
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -365,7 +443,7 @@ tbody tr:last-child td {
 
 /* Schedule Selector */
 .schedule-selector {
-    background: var(--wood-text-light);
+    background: var(--wood-text-light); /* Off-White - table text boxes */
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 2rem;
@@ -376,7 +454,7 @@ tbody tr:last-child td {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: var(--wood-text-dark);
+    color: var(--wood-text-dark); /* Pure Black - text */
 }
 
 .schedule-selector select {
@@ -385,11 +463,13 @@ tbody tr:last-child td {
     border: 2px solid var(--wood-border);
     border-radius: 6px;
     font-size: 1rem;
+    background: var(--wood-text-light); /* Off-White - form inputs */
+    color: var(--wood-text-dark); /* Pure Black - text in form inputs */
 }
 
 /* Footer */
 footer {
-    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-medium) 100%);
+    background: var(--wood-dark); /* Dark Walnut - footer background */
     color: var(--wood-text-light);
     padding: 2rem 0;
     margin-top: 4rem;

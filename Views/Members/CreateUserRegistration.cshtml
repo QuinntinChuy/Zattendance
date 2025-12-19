@@ -1,0 +1,131 @@
+@model CreateUserRegistrationViewModel
+@{
+    ViewData["Title"] = "Create User Registration";
+}
+<link rel="stylesheet" href="~/css/members.css" />
+<link rel="stylesheet" href="~/css/modal.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-user-plus"></i> Create User Registration</h2>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="CreateUserRegistration" method="post" class="user-registration-form">
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="EmployeeId">MEMBER <span class="required-asterisk">*</span></label>
+            </div>
+            <div class="form-input">
+                <select asp-for="EmployeeId" class="form-control" required>
+                    <option value="">---Select Member Name---</option>
+                    @if (ViewBag.Members != null)
+                    {
+                        @foreach (var member in ViewBag.Members as List<Member> ?? new List<Member>())
+                        {
+                            <option value="@member.Id">@member.FullName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="EmployeeId" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="UserName">USERNAME <span class="required-asterisk">*</span></label>
+            </div>
+            <div class="form-input">
+                <input asp-for="UserName" class="form-control" placeholder="Username" required />
+                <span asp-validation-for="UserName" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="Email">EMAIL <span class="required-asterisk">*</span></label>
+            </div>
+            <div class="form-input">
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email" required />
+                <span asp-validation-for="Email" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="Password">PASSWORD <span class="required-asterisk">*</span></label>
+            </div>
+            <div class="form-input">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password" required minlength="6" />
+                <span asp-validation-for="Password" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="ConfirmPassword">CONFIRM PASSWORD <span class="required-asterisk">*</span></label>
+            </div>
+            <div class="form-input">
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" required />
+                <span asp-validation-for="ConfirmPassword" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-label">
+                <label asp-for="AccessType">ACCESS TYPE</label>
+            </div>
+            <div class="form-input">
+                <select asp-for="AccessType" class="form-control">
+                    <option value="">----Please select Access Type----</option>
+                    <option value="User">User</option>
+                    <option value="Administrator">Administrator</option>
+                </select>
+                <span asp-validation-for="AccessType" class="validation-error"></span>
+            </div>
+        </div>
+
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-submit">
+                <i class="fas fa-check"></i> Submit
+            </button>
+            <a href="@Url.Action("Index", "Members")" class="btn cancel-btn">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Password confirmation validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var password = document.getElementById('Password').value;
+            var confirmPassword = document.getElementById('ConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+        });
+
+        // Auto-fill email and username based on selected employee
+        document.getElementById('EmployeeId')?.addEventListener('change', function() {
+            var memberId = this.value;
+            if (memberId) {
+                // You can add AJAX call here to fetch member details and auto-fill
+                // For now, we'll just enable the fields
+            }
+        });
+    </script>
+}
+

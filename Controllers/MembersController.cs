@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using ChurchAttendance.Data;
 using ChurchAttendance.Models;
+using ChurchAttendance.ViewModels;
 
 namespace ChurchAttendance.Controllers
 {
@@ -10,10 +12,12 @@ namespace ChurchAttendance.Controllers
     public class MembersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MembersController(ApplicationDbContext context)
+        public MembersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -168,6 +172,185 @@ namespace ChurchAttendance.Controllers
 
             TempData["SuccessMessage"] = $"Successfully imported {addedCount} members. {skippedCount} rows were skipped.";
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public IActionResult RegisterUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check if username already exists
+                var existingUser = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("UserName", "Username already exists.");
+                    return View(model);
+                }
+
+                // Check if email already exists
+                var existingEmail = await _userManager.FindByEmailAsync(model.Email);
+                if (existingEmail != null)
+                {
+                    ModelState.AddModelError("Email", "Email already exists.");
+                    return View(model);
+                }
+
+                // Parse role
+                if (!Enum.TryParse<UserRole>(model.Role, true, out var userRole))
+                {
+                    ModelState.AddModelError("Role", "Invalid role selection.");
+                    return View(model);
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FullName = model.FullName,
+                    Role = userRole,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // Add user to role
+                    var roleName = userRole == UserRole.Administrator ? "Administrator" : "User";
+                    await _userManager.AddToRoleAsync(user, roleName);
+
+                    TempData["SuccessMessage"] = $"User '{model.UserName}' has been successfully registered as {roleName}.";
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CreateUserRegistration()
+        {
+            // Get all active members for the employee dropdown
+            var members = await _context.Members
+                .Where(m => m.IsActive)
+                .OrderBy(m => m.LastName)
+                .ThenBy(m => m.FirstName)
+                .ToListAsync();
+            
+            ViewBag.Members = members;
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUserRegistration(CreateUserRegistrationViewModel model)
+        {
+            // Validate password match
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Check if username already exists
+                var existingUser = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("UserName", "Username already exists.");
+                    var members = await _context.Members
+                        .Where(m => m.IsActive)
+                        .OrderBy(m => m.LastName)
+                        .ThenBy(m => m.FirstName)
+                        .ToListAsync();
+                    ViewBag.Members = members;
+                    return View(model);
+                }
+
+                // Check if email already exists
+                var existingEmail = await _userManager.FindByEmailAsync(model.Email);
+                if (existingEmail != null)
+                {
+                    ModelState.AddModelError("Email", "Email already exists.");
+                    var members = await _context.Members
+                        .Where(m => m.IsActive)
+                        .OrderBy(m => m.LastName)
+                        .ThenBy(m => m.FirstName)
+                        .ToListAsync();
+                    ViewBag.Members = members;
+                    return View(model);
+                }
+
+                // Get member details if employee is selected
+                Member? member = null;
+                if (model.EmployeeId.HasValue)
+                {
+                    member = await _context.Members.FindAsync(model.EmployeeId.Value);
+                }
+
+                // Parse access type (default to User if not specified)
+                var accessType = string.IsNullOrEmpty(model.AccessType) ? "User" : model.AccessType;
+                if (!Enum.TryParse<UserRole>(accessType, true, out var userRole))
+                {
+                    userRole = UserRole.User;
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FullName = member != null ? member.FullName : model.UserName,
+                    Role = userRole,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // Add user to role
+                    var roleName = userRole == UserRole.Administrator ? "Administrator" : "User";
+                    await _userManager.AddToRoleAsync(user, roleName);
+
+                    TempData["SuccessMessage"] = $"User '{model.UserName}' has been successfully registered as {roleName}.";
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            // Reload members for dropdown
+            var allMembers = await _context.Members
+                .Where(m => m.IsActive)
+                .OrderBy(m => m.LastName)
+                .ThenBy(m => m.FirstName)
+                .ToListAsync();
+            ViewBag.Members = allMembers;
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public IActionResult RegistrationCreated()
+        {
+            return View();
         }
     }
 }

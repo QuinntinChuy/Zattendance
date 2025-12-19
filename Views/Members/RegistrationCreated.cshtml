@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Registration Created";
+}
+<link rel="stylesheet" href="~/css/members.css" />
+<link rel="stylesheet" href="~/css/modal.css" />
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-check-circle"></i> Registration Link Created</h2>
+    </div>
+
+    <div class="registration-success">
+        <div class="alert alert-success">
+            <h4><i class="fas fa-check-circle"></i> Registration link has been created successfully!</h4>
+        </div>
+
+        <div class="registration-details">
+            <div class="detail-item">
+                <label><strong>Registration Code:</strong></label>
+                <div class="code-display">
+                    <code>@TempData["RegistrationCode"]</code>
+                    <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('@TempData["RegistrationCode"]')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <label><strong>Registration URL:</strong></label>
+                <div class="url-display">
+                    <input type="text" id="registrationUrl" value="@TempData["RegistrationUrl"]" readonly class="form-control" />
+                    <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('@TempData["RegistrationUrl"]')">
+                        <i class="fas fa-copy"></i> Copy URL
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <label><strong>Role:</strong></label>
+                <span class="badge badge-primary">@TempData["Role"]</span>
+            </div>
+
+            @if (TempData["ExpiryDate"] != null)
+            {
+                <div class="detail-item">
+                    <label><strong>Expiry Date:</strong></label>
+                    <span>@TempData["ExpiryDate"]</span>
+                </div>
+            }
+        </div>
+
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Share this registration code or URL with the user. They can use it to register their account.
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "Members")" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Members</a>
+            <a href="@Url.Action("CreateUserRegistration", "Members")" class="btn btn-secondary"><i class="fas fa-plus"></i> Create Another</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Copied to clipboard!');
+            }, function(err) {
+                // Fallback for older browsers
+                var textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Copied to clipboard!');
+            });
+        }
+    </script>
+}
+

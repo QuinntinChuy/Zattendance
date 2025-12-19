@@ -9,26 +9,29 @@
         <h2><i class="fas fa-user-plus"></i> Add New Member</h2>
     </div>
 
-    <form asp-action="AddMember" method="post">
+    <form asp-action="AddMember" method="post" id="addMemberFormPage">
         <div class="form-group">
-            <label asp-for="FirstName">First Name</label>
-            <input asp-for="FirstName" class="form-control" required />
-            <span asp-validation-for="FirstName" class="validation-error"></span>
+            <label asp-for="FullName">Full Name</label>
+            <input asp-for="FullName" class="form-control" required placeholder="e.g., john mark fernandez smith" />
+            <span asp-validation-for="FullName" class="validation-error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="LastName">Last Name</label>
-            <input asp-for="LastName" class="form-control" required />
-            <span asp-validation-for="LastName" class="validation-error"></span>
+            <label asp-for="LifeNumber">Life Number (Member ID)</label>
+            <input asp-for="LifeNumber" class="form-control" placeholder="e.g., M05-12345-67890" />
+            <span asp-validation-for="LifeNumber" class="validation-error"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Gender">Gender</label>
             <select asp-for="Gender" class="form-control" required>
                 <option value="">-- Select Gender --</option>
-                <option value="@Gender.Male">Male</option>
-                <option value="@Gender.Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
             </select>
+            <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.25rem;">
+                Examples: Male - john mark fernandez smith | Female - jane marie fernandez smith
+            </small>
             <span asp-validation-for="Gender" class="validation-error"></span>
         </div>
 
@@ -45,6 +48,12 @@
                 }
             </select>
             <span asp-validation-for="GroupId" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Position">Position (Optional)</label>
+            <input asp-for="Position" class="form-control" placeholder="e.g., Leader, Member, Teacher, etc." />
+            <span asp-validation-for="Position" class="validation-error"></span>
         </div>
 
         <div class="d-flex gap-2">

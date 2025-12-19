@@ -15,7 +15,8 @@
         <p style="margin: 0; color: var(--wood-text-dark); line-height: 1.6;">
             Paste your data in tab-separated format: <strong>[Member ID] [Tab] [Full Name] [Tab] [Gender]</strong><br />
             Each line represents one member. Gender should be either "Male" or "Female".<br />
-            Example: <code>M05-180504-17253	Mark Varens Alcaraz Laguerta	Male</code>
+            Example (Male): <code>M05-12345-67890	john mark fernandez smith	Male</code><br />
+            Example (Female): <code>M05-12345-67891	jane marie fernandez smith	Female</code>
         </p>
     </div>
 
@@ -44,7 +45,7 @@
         <div class="form-group">
             <label for="memberData">Member Data</label>
             <textarea name="memberData" id="memberData" class="form-control" rows="25" 
-                placeholder="Paste your member data here. Format: Member ID [Tab] Full Name [Tab] Gender&#10;&#10;Example:&#10;M05-180504-17253	Mark Varens Alcaraz Laguerta	Male&#10;M05-241226-127797	Benhur Anthony Gimpayan Palad	Male"></textarea>
+                placeholder="Paste your member data here. Format: Member ID [Tab] Full Name [Tab] Gender&#10;&#10;Example (Male):&#10;M05-12345-67890	john mark fernandez smith	Male&#10;&#10;Example (Female):&#10;M05-12345-67891	jane marie fernandez smith	Female"></textarea>
             <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.5rem;">
                 Copy and paste your data from the spreadsheet. Duplicate members (by Member ID or Name) will be skipped.
             </small>

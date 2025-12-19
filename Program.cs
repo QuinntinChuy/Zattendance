@@ -2,15 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ChurchAttendance.Data;
 using ChurchAttendance.Models;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Database connection
+// Database connection - MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 21))));
 
 // Identity configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -51,13 +54,45 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Seed database
+// Auto-migrate and seed database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    
+    try
+    {
+        // Check if database exists, if not create it
+        if (!context.Database.CanConnect())
+        {
+            // Database doesn't exist, create it
+            context.Database.EnsureCreated();
+        }
+        else
+        {
+            // Database exists, try to apply migrations
+            try
+            {
+                var pendingMigrations = context.Database.GetPendingMigrations();
+                if (pendingMigrations.Any())
+                {
+                    context.Database.Migrate();
+                }
+            }
+            catch
+            {
+                // If migrations don't exist or fail, ensure schema is up to date
+                context.Database.EnsureCreated();
+            }
+        }
+    }
+    catch
+    {
+        // Fallback: ensure database is created
+        context.Database.EnsureCreated();
+    }
     
     DbInitializer.Initialize(context, userManager, roleManager).Wait();
 }

@@ -11,7 +11,7 @@ namespace ChurchAttendance.Models
     public enum UserRole
     {
         Administrator,
-        TeamLeader
+        User
     }
 }
 

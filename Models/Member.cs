@@ -11,6 +11,7 @@ namespace ChurchAttendance.Models
         public DateTime DateJoined { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
         public string? MemberNumber { get; set; } // For storing M05-xxxxx reference IDs
+        public string? Position { get; set; } // Member position/role in the church
         
         public string FullName => $"{FirstName} {LastName}";
     }

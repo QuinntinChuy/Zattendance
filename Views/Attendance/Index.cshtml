@@ -1,50 +1,185 @@
 @model AttendanceIndexViewModel
 @{
     ViewData["Title"] = "Attendance";
+    var activeTab = ViewBag.ActiveTab ?? "Members";
 }
 <link rel="stylesheet" href="~/css/attendance.css" />
+<link rel="stylesheet" href="~/css/modal.css" />
 
 <div class="card">
-    <div class="card-header">
-        <h2><i class="fas fa-clipboard-check"></i> Attendance Management</h2>
+    <!-- Navigation Tabs -->
+    <div class="attendance-tabs">
+        <button class="attendance-tab @(activeTab == "Members" ? "active" : "")" onclick="switchTab('Members')">
+            <i class="fas fa-users"></i> MEMBERS
+        </button>
+        <button class="attendance-tab @(activeTab == "PositionHolder" ? "active" : "")" onclick="switchTab('PositionHolder')">
+            <i class="fas fa-user-tie"></i> POSITION HOLDER
+        </button>
+        <button class="attendance-tab @(activeTab == "GroupName" ? "active" : "")" onclick="switchTab('GroupName')">
+            <i class="fas fa-layer-group"></i> GROUP NAME
+        </button>
     </div>
 
-    @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+    @if (activeTab == "Members")
     {
-        <div class="attendance-add-member">
-            <a href="@Url.Action("AddMember", "Attendance")" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add New Member</a>
+        <!-- Member List Header -->
+        <div class="member-list-header">
+            <h2>MEMBER LIST</h2>
+            @if (User.IsInRole("User") || User.IsInRole("Administrator"))
+            {
+                <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                    Add Members
+                </button>
+            }
+        </div>
+
+        <!-- Display and Search Controls -->
+        <div class="member-list-controls">
+            <div class="display-control">
+                <label>Display</label>
+                <select id="displayRecords" class="form-control" onchange="updateDisplay()">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>records</label>
+            </div>
+            <div class="search-control">
+                <label>Search:</label>
+                <input type="text" id="memberSearch" class="form-control" placeholder="Search members..." onkeyup="filterMembers()" />
+            </div>
+        </div>
+    }
+    else if (activeTab == "PositionHolder")
+    {
+        <!-- Position Holder List Header -->
+        <div class="member-list-header">
+            <h2>POSITION HOLDER LIST</h2>
+            @if (User.IsInRole("User") || User.IsInRole("Administrator"))
+            {
+                <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addPositionHolderModal">
+                    Add Position Holder
+                </button>
+            }
+        </div>
+
+        <!-- Display and Search Controls -->
+        <div class="member-list-controls">
+            <div class="display-control">
+                <label>Display</label>
+                <select id="displayRecordsPosition" class="form-control" onchange="updateDisplay()">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>records</label>
+            </div>
+            <div class="search-control">
+                <label>Search:</label>
+                <input type="text" id="positionHolderSearch" class="form-control" placeholder="Search position holders..." onkeyup="filterPositionHolders()" />
+            </div>
+        </div>
+    }
+    else if (activeTab == "GroupName")
+    {
+        <!-- Group Name List Header -->
+        <div class="member-list-header">
+            <h2>GROUP NAME LIST</h2>
+            @if (User.IsInRole("Administrator"))
+            {
+                <button type="button" class="btn btn-primary btn-add-member" data-bs-toggle="modal" data-bs-target="#addGroupNameModal">
+                    Add Group Name
+                </button>
+            }
+        </div>
+
+        <!-- Display and Search Controls -->
+        <div class="member-list-controls">
+            <div class="display-control">
+                <label>Display</label>
+                <select id="displayRecordsGroup" class="form-control" onchange="updateDisplay()">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>records</label>
+            </div>
+            <div class="search-control">
+                <label>Search:</label>
+                <input type="text" id="groupNameSearch" class="form-control" placeholder="Search groups..." onkeyup="filterGroups()" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-header">
+            <h2><i class="fas fa-clipboard-check"></i> Attendance Management</h2>
+        </div>
+
+        <div class="schedule-selector">
+            <label for="scheduleSelect">Select Schedule:</label>
+            <select id="scheduleSelect" class="form-control" onchange="updateFilters()">
+                <option value="">-- Select a Schedule --</option>
+                @foreach (var schedule in Model.AllSchedules)
+                {
+                    @if (Model.Schedule?.Id == schedule.Id)
+                    {
+                        <option value="@schedule.Id" selected>
+                            @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
+                            @if (schedule.Group != null)
+                            {
+                                <text> (@schedule.Group.Name)</text>
+                            }
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@schedule.Id">
+                            @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
+                            @if (schedule.Group != null)
+                            {
+                                <text> (@schedule.Group.Name)</text>
+                            }
+                        </option>
+                    }
+                }
+            </select>
         </div>
     }
 
-    <div class="schedule-selector">
-        <label for="scheduleSelect">Select Schedule:</label>
-        <select id="scheduleSelect" class="form-control" onchange="location.href='@Url.Action("Index", "Attendance")?scheduleId=' + this.value">
-            <option value="">-- Select a Schedule --</option>
-            @foreach (var schedule in Model.AllSchedules)
-            {
-                @if (Model.Schedule?.Id == schedule.Id)
-                {
-                    <option value="@schedule.Id" selected>
-                        @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
-                        @if (schedule.Group != null)
-                        {
-                            <text> (@schedule.Group.Name)</text>
-                        }
-                    </option>
-                }
-                else
-                {
-                    <option value="@schedule.Id">
-                        @schedule.Title - @schedule.Date.ToString("MMMM dd, yyyy")
-                        @if (schedule.Group != null)
-                        {
-                            <text> (@schedule.Group.Name)</text>
-                        }
-                    </option>
-                }
-            }
-        </select>
-    </div>
+    @if (Model.Schedule != null)
+    {
+        <div class="attendance-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="filterGroup">Filter by Group:</label>
+                <select id="filterGroup" class="form-control" onchange="updateFilters()">
+                    <option value="">-- All Groups --</option>
+                    @foreach (var group in Model.AllGroups)
+                    {
+                        <option value="@group.Id" selected="@(Model.FilterGroupId == group.Id)">
+                            @group.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <label for="filterPosition">Filter by Position:</label>
+                <select id="filterPosition" class="form-control" onchange="updateFilters()">
+                    <option value="">-- All Positions --</option>
+                    @foreach (var position in Model.AllPositions)
+                    {
+                        <option value="@position" selected="@(Model.FilterPosition == position)">
+                            @position
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+    }
 
     @if (Model.Schedule != null)
     {
@@ -61,74 +196,186 @@
             }
         </div>
 
-        @if (Model.Members.Any())
+        @if (activeTab == "GroupName")
         {
+            <!-- Group Name Tab: Show all groups -->
+            var groupsWithDetails = ViewBag.GroupsWithDetails;
+            
+            @if (groupsWithDetails != null && ((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Any())
+            {
+                <div class="table-container">
+                    <table id="groupNameTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Group Name
+                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(0)"></i>
+                                </th>
+                                <th>
+                                    Leader Name
+                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(1)"></i>
+                                </th>
+                                <th>
+                                    Total Member
+                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(2)"></i>
+                                </th>
+                                <th>
+                                    ACTION
+                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(3)"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (dynamic groupDetail in groupsWithDetails)
+                            {
+                                <tr>
+                                    <td>@groupDetail.Group.Name</td>
+                                    <td>@(groupDetail.Leader != null ? groupDetail.Leader.FullName : "N/A")</td>
+                                    <td>@groupDetail.TotalMembers</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="@Url.Action("Index", "Groups")" class="btn btn-edit">
+                                                <i class="fas fa-users"></i> Edit Members
+                                            </a>
+                                            @if (User.IsInRole("Administrator"))
+                                            {
+                                                <form asp-action="Delete" asp-controller="Groups" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this group?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@groupDetail.Group.Id" />
+                                                    <button type="submit" class="btn btn-delete">
+                                                        <i class="fas fa-trash"></i> Delete Group
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing 1 to @(((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Count()) of @(((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Count()) entries
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn-pagination" disabled>Previous</button>
+                        <button class="btn-pagination active">1</button>
+                        <button class="btn-pagination" disabled>Next</button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center attendance-empty-message">
+                    <p>No groups found.</p>
+                </div>
+            }
+        }
+        else if ((Model.Members != null && Model.Members.Any()) || (activeTab == "Members" && Model.Members != null) || (activeTab == "PositionHolder" && Model.Members != null))
+        {
+            <!-- Members or Position Holder view -->
             <div class="table-container">
-                <table>
+                <table id="@(activeTab == "PositionHolder" ? "positionHolderTable" : "membersTable")">
                     <thead>
                         <tr>
-                            <th>Member Name</th>
-                            <th>Group</th>
-                            <th>Status</th>
-                            @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+                            <th>
+                                Full Name
+                                <i class="fas fa-sort sort-icon" onclick="sortTable(0)"></i>
+                            </th>
+                            @if (activeTab == "Members")
                             {
-                                <th>Actions</th>
+                                <th>
+                                    Life Number.
+                                    <i class="fas fa-sort sort-icon" onclick="sortTable(1)"></i>
+                                </th>
                             }
+                            @if (activeTab == "PositionHolder")
+                            {
+                                <th>
+                                    Life Number
+                                    <i class="fas fa-sort sort-icon" onclick="sortTable(1)"></i>
+                                </th>
+                                <th>
+                                    Position
+                                    <i class="fas fa-sort sort-icon" onclick="sortTable(2)"></i>
+                                </th>
+                            }
+                            <th>
+                                @if (activeTab == "PositionHolder")
+                                {
+                                    <text>ACTION</text>
+                                }
+                                else
+                                {
+                                    <text>ACTION STATUS</text>
+                                }
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var member in Model.Members)
+                        @foreach (var member in Model.Members ?? new List<Member>())
                         {
-                            var attendance = Model.Attendances.FirstOrDefault(a => a.MemberId == member.Id);
                             <tr>
                                 <td>@member.FullName</td>
-                                <td>@(member.Group?.Name ?? "N/A")</td>
-                                <td>
-                                    @if (attendance != null)
-                                    {
-                                        <span class="badge badge-@attendance.Status.ToString().ToLower()">
-                                            @attendance.Status.ToString()
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="attendance-not-recorded">Not Recorded</span>
-                                    }
-                                </td>
-                                @if (User.IsInRole("TeamLeader") || User.IsInRole("Administrator"))
+                                @if (activeTab == "Members")
                                 {
-                                    <td>
-                                        <form asp-action="MarkAttendance" method="post" class="attendance-form-inline">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="scheduleId" value="@Model.Schedule.Id" />
-                                            <input type="hidden" name="memberId" value="@member.Id" />
-                                            <div class="attendance-buttons">
-                                                <button type="submit" name="status" value="@AttendanceStatus.Present" 
-                                                    class="attendance-btn present @(attendance?.Status == AttendanceStatus.Present ? "active" : "")">
-                                                    <i class="fas fa-check-circle"></i> Present
-                                                </button>
-                                                <button type="submit" name="status" value="@AttendanceStatus.Late" 
-                                                    class="attendance-btn late @(attendance?.Status == AttendanceStatus.Late ? "active" : "")">
-                                                    <i class="fas fa-clock"></i> Late
-                                                </button>
-                                                <button type="submit" name="status" value="@AttendanceStatus.Absent" 
-                                                    class="attendance-btn absent @(attendance?.Status == AttendanceStatus.Absent ? "active" : "")">
-                                                    <i class="fas fa-times-circle"></i> Absent
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </td>
+                                    <td>@(member.MemberNumber ?? "N/A")</td>
                                 }
+                                @if (activeTab == "PositionHolder")
+                                {
+                                    <td>@(member.MemberNumber ?? "N/A")</td>
+                                    <td>@(member.Position ?? "N/A")</td>
+                                }
+                                <td>
+                                    <div class="action-buttons">
+                                        @if (activeTab == "Members")
+                                        {
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Information">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                        }
+                                        @if (activeTab == "PositionHolder")
+                                        {
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Position">
+                                                <i class="fas fa-edit"></i> Edit Position
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
+            
+            @if (activeTab == "PositionHolder")
+            {
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing 1 to @(Model.Members?.Count() ?? 0) of @(Model.Members?.Count() ?? 0) entries
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn-pagination" disabled>Previous</button>
+                        <button class="btn-pagination active">1</button>
+                        <button class="btn-pagination" disabled>Next</button>
+                    </div>
+                </div>
+            }
         }
         else
         {
             <div class="text-center attendance-empty-message">
-                <p>No members found for this schedule.</p>
+                <p>No @(activeTab == "PositionHolder" ? "position holders" : "members") found.</p>
             </div>
         }
     }
@@ -139,4 +386,479 @@
         </div>
     }
 </div>
+
+<!-- Add Position Holder Modal -->
+@if (User.IsInRole("User") || User.IsInRole("Administrator"))
+{
+    <div class="modal fade" id="addPositionHolderModal" tabindex="-1" aria-labelledby="addPositionHolderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPositionHolderModalLabel"><i class="fas fa-user-tie"></i> Add Position Holder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addPositionHolderForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="positionHolderName">Name <span class="required-asterisk">*</span></label>
+                            <select id="positionHolderName" name="MemberId" class="form-control" required>
+                                <option value="">---Select Members---</option>
+                                @if (ViewBag.AllMembersForPosition != null)
+                                {
+                                    @foreach (var member in ViewBag.AllMembersForPosition as List<Member> ?? new List<Member>())
+                                    {
+                                        <option value="@member.Id" data-life-number="@(member.MemberNumber ?? "")">@member.FullName</option>
+                                    }
+                                }
+                            </select>
+                            <span class="validation-error" id="positionHolderNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="positionHolderLifeNumber">Life Number <span class="required-asterisk">*</span></label>
+                            <input type="text" id="positionHolderLifeNumber" name="LifeNumber" class="form-control" readonly />
+                            <span class="validation-error" id="positionHolderLifeNumberError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="positionHolderPosition">Position <span class="required-asterisk">*</span></label>
+                            <input type="text" id="positionHolderPosition" name="Position" class="form-control" required placeholder="e.g., GL, UL, Leader" />
+                            <span class="validation-error" id="positionHolderPositionError"></span>
+                        </div>
+
+                        <div id="addPositionHolderErrors" class="alert alert-danger" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> SAVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Add Group Name Modal -->
+@if (User.IsInRole("Administrator"))
+{
+    <div class="modal fade" id="addGroupNameModal" tabindex="-1" aria-labelledby="addGroupNameModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGroupNameModalLabel"><i class="fas fa-layer-group"></i> Add Group Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addGroupNameForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body add-group-modal-body">
+                        <div class="add-group-form-panel">
+                            <div class="form-group">
+                                <label for="groupName">Group Name <span class="required-asterisk">*</span></label>
+                                <input type="text" id="groupName" name="GroupName" class="form-control" required placeholder="e.g., MA1, MY, MA3" />
+                                <span class="validation-error" id="groupNameError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="groupLeader">Leader <span class="required-asterisk">*</span></label>
+                                <select id="groupLeader" name="LeaderId" class="form-control" required>
+                                    <option value="">---Select Members---</option>
+                                    @if (ViewBag.AllMembersForGroup != null)
+                                    {
+                                        @foreach (var member in ViewBag.AllMembersForGroup as List<Member> ?? new List<Member>())
+                                        {
+                                            <option value="@member.Id" data-life-number="@(member.MemberNumber ?? "")">@member.FullName</option>
+                                        }
+                                    }
+                                </select>
+                                <span class="validation-error" id="groupLeaderError"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="groupLeaderLifeNumber">Life Number :</label>
+                                <input type="text" id="groupLeaderLifeNumber" name="LeaderLifeNumber" class="form-control" readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="groupTotalMembers">Total Members :</label>
+                                <input type="text" id="groupTotalMembers" name="TotalMembers" class="form-control" readonly value="0" />
+                            </div>
+                        </div>
+
+                        <div class="add-group-members-panel">
+                            <h4>LIST OF MEMBER</h4>
+                            <div class="member-list-controls-modal">
+                                <div class="display-control">
+                                    <label>Display</label>
+                                    <select id="displayRecordsModal" class="form-control" onchange="updateModalDisplay()">
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <label>records</label>
+                                </div>
+                                <div class="search-control">
+                                    <label>Search:</label>
+                                    <input type="text" id="memberSearchModal" class="form-control" placeholder="Search members..." onkeyup="filterModalMembers()" />
+                                </div>
+                            </div>
+                            <div class="table-container-modal">
+                                <table id="modalMembersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Check</th>
+                                            <th>Name</th>
+                                            <th>Life Number</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.AllMembersForGroup != null)
+                                        {
+                                            @foreach (var member in ViewBag.AllMembersForGroup as List<Member> ?? new List<Member>())
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="SelectedMembers" value="@member.Id" class="member-checkbox" onchange="updateTotalMembers()" />
+                                                    </td>
+                                                    <td>@member.FullName</td>
+                                                    <td>@(member.MemberNumber ?? "N/A")</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container-modal">
+                                <div class="pagination-info">
+                                    Showing 1 to <span id="modalMemberCount">@(ViewBag.AllMembersForGroup != null ? ((List<Member>)ViewBag.AllMembersForGroup).Count : 0)</span> of <span id="modalMemberTotal">@(ViewBag.AllMembersForGroup != null ? ((List<Member>)ViewBag.AllMembersForGroup).Count : 0)</span> entries
+                                </div>
+                                <div class="pagination-controls">
+                                    <button class="btn-pagination" disabled>Previous</button>
+                                    <button class="btn-pagination active">1</button>
+                                    <button class="btn-pagination" disabled>Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn cancel-btn" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> SAVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Add Member Modal -->
+@if (User.IsInRole("User") || User.IsInRole("Administrator"))
+{
+    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMemberModalLabel"><i class="fas fa-user-plus"></i> Add New Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addMemberForm">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" name="FullName" class="form-control" required placeholder="e.g., john mark fernandez smith" />
+                            <span class="validation-error" id="fullNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lifeNumber">Life Number (Member ID)</label>
+                            <input type="text" id="lifeNumber" name="LifeNumber" class="form-control" placeholder="e.g., M05-12345-67890" />
+                            <span class="validation-error" id="lifeNumberError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="Gender" class="form-control" required>
+                                <option value="">-- Select Gender --</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <small style="color: var(--wood-text-dark); opacity: 0.7; display: block; margin-top: 0.25rem;">
+                                Examples: Male - john mark fernandez smith | Female - jane marie fernandez smith
+                            </small>
+                            <span class="validation-error" id="genderError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groupId">Group *</label>
+                            <select id="groupId" name="GroupId" class="form-control" required>
+                                <option value="">-- Select Group --</option>
+                                @if (Model.AllGroups != null)
+                                {
+                                    @foreach (var group in Model.AllGroups)
+                                    {
+                                        <option value="@group.Id">@group.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span class="validation-error" id="groupIdError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="position">Position (Optional)</label>
+                            <input type="text" id="position" name="Position" class="form-control" placeholder="e.g., Leader, Member, Teacher, etc." />
+                            <span class="validation-error" id="positionError"></span>
+                        </div>
+
+                        <div id="addMemberErrors" class="alert alert-danger" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn cancel-btn" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function switchTab(tabName) {
+        var scheduleId = document.getElementById('scheduleSelect') ? document.getElementById('scheduleSelect').value : '';
+        var groupId = document.getElementById('filterGroup') ? document.getElementById('filterGroup').value : '';
+        var position = document.getElementById('filterPosition') ? document.getElementById('filterPosition').value : '';
+        
+        var url = '@Url.Action("Index", "Attendance")?tab=' + tabName;
+        if (scheduleId) {
+            url += '&scheduleId=' + scheduleId;
+        }
+        if (groupId) {
+            url += '&filterGroupId=' + groupId;
+        }
+        if (position) {
+            url += '&filterPosition=' + encodeURIComponent(position);
+        }
+        
+        window.location.href = url;
+    }
+
+    function updateFilters() {
+        var scheduleId = document.getElementById('scheduleSelect').value;
+        var groupId = document.getElementById('filterGroup') ? document.getElementById('filterGroup').value : '';
+        var position = document.getElementById('filterPosition') ? document.getElementById('filterPosition').value : '';
+        var activeTab = '@activeTab';
+        
+        var url = '@Url.Action("Index", "Attendance")?scheduleId=' + scheduleId + '&tab=' + activeTab;
+        if (groupId) {
+            url += '&filterGroupId=' + groupId;
+        }
+        if (position) {
+            url += '&filterPosition=' + encodeURIComponent(position);
+        }
+        
+        window.location.href = url;
+    }
+
+    // Handle Add Member Modal Form Submission
+    document.getElementById('addMemberForm')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        var formObject = {};
+        formData.forEach((value, key) => {
+            if (key !== '__RequestVerificationToken') {
+                formObject[key] = value;
+            }
+        });
+
+        // Get anti-forgery token
+        var token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+        try {
+            var response = await fetch('@Url.Action("AddMember", "Attendance")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token || ''
+                },
+                body: JSON.stringify(formObject)
+            });
+
+            var result = await response.json();
+            
+            if (result.success) {
+                // Close modal and reload page
+                var modalElement = document.getElementById('addMemberModal');
+                var modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+                window.location.reload();
+            } else {
+                // Show errors
+                var errorDiv = document.getElementById('addMemberErrors');
+                if (result.errors && result.errors.length > 0) {
+                    errorDiv.innerHTML = '<ul><li>' + result.errors.join('</li><li>') + '</li></ul>';
+                    errorDiv.style.display = 'block';
+                } else {
+                    errorDiv.innerHTML = '<p>An error occurred while adding the member.</p>';
+                    errorDiv.style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            var errorDiv = document.getElementById('addMemberErrors');
+            errorDiv.innerHTML = '<p>An error occurred. Please try again.</p>';
+            errorDiv.style.display = 'block';
+        }
+    });
+
+    // Clear form when modal is closed
+    document.getElementById('addMemberModal')?.addEventListener('hidden.bs.modal', function() {
+        document.getElementById('addMemberForm').reset();
+        document.getElementById('addMemberErrors').style.display = 'none';
+        // Clear validation errors
+        document.querySelectorAll('.validation-error').forEach(el => el.textContent = '');
+    });
+
+    // Filter members function
+    function filterMembers() {
+        var input = document.getElementById('memberSearch');
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById('membersTable');
+        var tr = table.getElementsByTagName('tr');
+
+        for (var i = 1; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName('td')[0]; // Full Name column
+            if (td) {
+                var txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Update display records
+    function updateDisplay() {
+        var select = document.getElementById('displayRecords');
+        var value = select.value;
+        // This would typically reload the page with pagination
+        // For now, we'll just store the preference
+        localStorage.setItem('displayRecords', value);
+    }
+
+    // Sort table function
+    function sortTable(n) {
+        var activeTab = '@activeTab';
+        var tableId = activeTab == 'PositionHolder' ? 'positionHolderTable' : 'membersTable';
+        var table = document.getElementById(tableId);
+        if (!table) return;
+        
+        var rows = Array.from(table.rows).slice(1);
+        var switching = true;
+        var dir = 'asc';
+        var shouldSwitch;
+
+        while (switching) {
+            switching = false;
+            for (var i = 0; i < rows.length - 1; i++) {
+                shouldSwitch = false;
+                var x = rows[i].getElementsByTagName('td')[n];
+                var y = rows[i + 1].getElementsByTagName('td')[n];
+
+                if (dir == 'asc') {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == 'desc') {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+
+    // Handle Add Position Holder Modal Form Submission
+    document.getElementById('addPositionHolderForm')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        var formObject = {};
+        formData.forEach((value, key) => {
+            if (key !== '__RequestVerificationToken') {
+                formObject[key] = value;
+            }
+        });
+
+        // Get anti-forgery token
+        var token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+        try {
+            var response = await fetch('@Url.Action("AddPositionHolder", "Attendance")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token || ''
+                },
+                body: JSON.stringify(formObject)
+            });
+
+            var result = await response.json();
+            
+            if (result.success) {
+                // Close modal and reload page
+                var modalElement = document.getElementById('addPositionHolderModal');
+                var modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+                window.location.reload();
+            } else {
+                // Show errors
+                var errorDiv = document.getElementById('addPositionHolderErrors');
+                if (result.errors && result.errors.length > 0) {
+                    errorDiv.innerHTML = '<ul><li>' + result.errors.join('</li><li>') + '</li></ul>';
+                    errorDiv.style.display = 'block';
+                } else {
+                    errorDiv.innerHTML = '<p>An error occurred while adding the position holder.</p>';
+                    errorDiv.style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            var errorDiv = document.getElementById('addPositionHolderErrors');
+            errorDiv.innerHTML = '<p>An error occurred. Please try again.</p>';
+            errorDiv.style.display = 'block';
+        }
+    });
+
+    // Auto-fill Life Number when member is selected
+    document.getElementById('positionHolderName')?.addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var lifeNumber = selectedOption.getAttribute('data-life-number');
+        var lifeNumberInput = document.getElementById('positionHolderLifeNumber');
+        if (lifeNumberInput && lifeNumber) {
+            lifeNumberInput.value = lifeNumber;
+        }
+    });
+
+    // Clear form when modal is closed
+    document.getElementById('addPositionHolderModal')?.addEventListener('hidden.bs.modal', function() {
+        document.getElementById('addPositionHolderForm').reset();
+        document.getElementById('addPositionHolderErrors').style.display = 'none';
+        document.querySelectorAll('#addPositionHolderForm .validation-error').forEach(el => el.textContent = '');
+    });
+</script>
+}
 

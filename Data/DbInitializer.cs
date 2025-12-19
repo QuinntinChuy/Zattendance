@@ -7,16 +7,16 @@ namespace ChurchAttendance.Data
     {
         public static async Task Initialize(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            context.Database.EnsureCreated();
+            // Database migration is handled in Program.cs
 
             // Create roles
             if (!await roleManager.RoleExistsAsync("Administrator"))
             {
                 await roleManager.CreateAsync(new IdentityRole("Administrator"));
             }
-            if (!await roleManager.RoleExistsAsync("TeamLeader"))
+            if (!await roleManager.RoleExistsAsync("User"))
             {
-                await roleManager.CreateAsync(new IdentityRole("TeamLeader"));
+                await roleManager.CreateAsync(new IdentityRole("User"));
             }
 
             // Create default admin user
@@ -39,23 +39,23 @@ namespace ChurchAttendance.Data
                 }
             }
 
-            // Create default team leader user
-            var existingTeamLeader = await userManager.FindByNameAsync("teamleader");
-            if (existingTeamLeader == null)
+            // Create default user account
+            var existingUser = await userManager.FindByNameAsync("user");
+            if (existingUser == null)
             {
-                var teamLeaderUser = new ApplicationUser
+                var regularUser = new ApplicationUser
                 {
-                    UserName = "teamleader",
-                    Email = "teamleader@church.com",
-                    FullName = "Team Leader",
-                    Role = UserRole.TeamLeader,
+                    UserName = "user",
+                    Email = "user@church.com",
+                    FullName = "User",
+                    Role = UserRole.User,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(teamLeaderUser, "Leader123!");
+                var result = await userManager.CreateAsync(regularUser, "User123!");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(teamLeaderUser, "TeamLeader");
+                    await userManager.AddToRoleAsync(regularUser, "User");
                 }
             }
 

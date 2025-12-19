@@ -4,13 +4,13 @@
     height: 80px;
     margin: 0 auto 1.5rem;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--wood-dark), var(--wood-medium));
+    background: var(--wood-dark); /* Dark Walnut - primary icons (important symbols) */
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 2.5rem;
-    box-shadow: 0 6px 20px rgba(107, 79, 63, 0.3);
+    box-shadow: 0 6px 20px rgba(75, 46, 30, 0.3);
 }
 
 .access-denied-title {
