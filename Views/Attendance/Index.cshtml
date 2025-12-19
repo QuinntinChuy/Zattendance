@@ -195,191 +195,154 @@
                 </p>
             }
         </div>
+    }
 
-        @if (activeTab == "GroupName")
-        {
-            <!-- Group Name Tab: Show all groups -->
-            var groupsWithDetails = ViewBag.GroupsWithDetails;
-            
-            @if (groupsWithDetails != null && ((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Any())
-            {
-                <div class="table-container">
-                    <table id="groupNameTable">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Group Name
-                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(0)"></i>
-                                </th>
-                                <th>
-                                    Leader Name
-                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(1)"></i>
-                                </th>
-                                <th>
-                                    Total Member
-                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(2)"></i>
-                                </th>
-                                <th>
-                                    ACTION
-                                    <i class="fas fa-sort sort-icon" onclick="sortGroupTable(3)"></i>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (dynamic groupDetail in groupsWithDetails)
-                            {
-                                <tr>
-                                    <td>@groupDetail.Group.Name</td>
-                                    <td>@(groupDetail.Leader != null ? groupDetail.Leader.FullName : "N/A")</td>
-                                    <td>@groupDetail.TotalMembers</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <a href="@Url.Action("Index", "Groups")" class="btn btn-edit">
-                                                <i class="fas fa-users"></i> Edit Members
-                                            </a>
-                                            @if (User.IsInRole("Administrator"))
-                                            {
-                                                <form asp-action="Delete" asp-controller="Groups" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this group?');">
-                                                    @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="id" value="@groupDetail.Group.Id" />
-                                                    <button type="submit" class="btn btn-delete">
-                                                        <i class="fas fa-trash"></i> Delete Group
-                                                    </button>
-                                                </form>
-                                            }
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Pagination -->
-                <div class="pagination-container">
-                    <div class="pagination-info">
-                        Showing 1 to @(((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Count()) of @(((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Count()) entries
-                    </div>
-                    <div class="pagination-controls">
-                        <button class="btn-pagination" disabled>Previous</button>
-                        <button class="btn-pagination active">1</button>
-                        <button class="btn-pagination" disabled>Next</button>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="text-center attendance-empty-message">
-                    <p>No groups found.</p>
-                </div>
-            }
-        }
-        else if ((Model.Members != null && Model.Members.Any()) || (activeTab == "Members" && Model.Members != null) || (activeTab == "PositionHolder" && Model.Members != null))
-        {
-            <!-- Members or Position Holder view -->
-            <div class="table-container">
-                <table id="@(activeTab == "PositionHolder" ? "positionHolderTable" : "membersTable")">
-                    <thead>
-                        <tr>
-                            <th>
-                                Full Name
-                                <i class="fas fa-sort sort-icon" onclick="sortTable(0)"></i>
-                            </th>
-                            @if (activeTab == "Members")
-                            {
-                                <th>
-                                    Life Number.
-                                    <i class="fas fa-sort sort-icon" onclick="sortTable(1)"></i>
-                                </th>
-                            }
-                            @if (activeTab == "PositionHolder")
-                            {
-                                <th>
-                                    Life Number
-                                    <i class="fas fa-sort sort-icon" onclick="sortTable(1)"></i>
-                                </th>
-                                <th>
-                                    Position
-                                    <i class="fas fa-sort sort-icon" onclick="sortTable(2)"></i>
-                                </th>
-                            }
-                            <th>
-                                @if (activeTab == "PositionHolder")
-                                {
-                                    <text>ACTION</text>
-                                }
-                                else
-                                {
-                                    <text>ACTION STATUS</text>
-                                }
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var member in Model.Members ?? new List<Member>())
+    @if (activeTab == "GroupName")
+    {
+        <!-- Group Name Tab: Show all groups -->
+        var groupsWithDetails = ViewBag.GroupsWithDetails;
+        
+        <!-- Group Name Table -->
+        <div class="table-container">
+            <table id="groupNameTable">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Leader Name</th>
+                        <th>Total Members</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (groupsWithDetails != null && ((System.Collections.IEnumerable)groupsWithDetails).Cast<object>().Any())
+                    {
+                        @foreach (dynamic groupDetail in groupsWithDetails)
                         {
                             <tr>
-                                <td>@member.FullName</td>
-                                @if (activeTab == "Members")
-                                {
-                                    <td>@(member.MemberNumber ?? "N/A")</td>
-                                }
-                                @if (activeTab == "PositionHolder")
-                                {
-                                    <td>@(member.MemberNumber ?? "N/A")</td>
-                                    <td>@(member.Position ?? "N/A")</td>
-                                }
+                                <td>@groupDetail.Group.Name</td>
+                                <td>@(groupDetail.Leader != null ? groupDetail.Leader.FullName : "N/A")</td>
+                                <td>@groupDetail.TotalMembers</td>
                                 <td>
                                     <div class="action-buttons">
-                                        @if (activeTab == "Members")
+                                        <a href="@Url.Action("Index", "Groups")" class="btn btn-edit">
+                                            <i class="fas fa-users"></i> Edit Members
+                                        </a>
+                                        @if (User.IsInRole("Administrator"))
                                         {
-                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
-                                                <i class="fas fa-eye"></i> View
-                                            </a>
-                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Information">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                        }
-                                        @if (activeTab == "PositionHolder")
-                                        {
-                                            <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
-                                                <i class="fas fa-eye"></i> View
-                                            </a>
-                                            <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Position">
-                                                <i class="fas fa-edit"></i> Edit Position
-                                            </a>
+                                            <form asp-action="Delete" asp-controller="Groups" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this group?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@groupDetail.Group.Id" />
+                                                <button type="submit" class="btn btn-delete">
+                                                    <i class="fas fa-trash"></i> Delete Group
+                                                </button>
+                                            </form>
                                         }
                                     </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-            
-            @if (activeTab == "PositionHolder")
-            {
-                <!-- Pagination -->
-                <div class="pagination-container">
-                    <div class="pagination-info">
-                        Showing 1 to @(Model.Members?.Count() ?? 0) of @(Model.Members?.Count() ?? 0) entries
-                    </div>
-                    <div class="pagination-controls">
-                        <button class="btn-pagination" disabled>Previous</button>
-                        <button class="btn-pagination active">1</button>
-                        <button class="btn-pagination" disabled>Next</button>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="text-center attendance-empty-message">
-                <p>No @(activeTab == "PositionHolder" ? "position holders" : "members") found.</p>
-            </div>
-        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No data inputted</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
-    else
+    else if (activeTab == "Members")
+    {
+        <!-- Member Table -->
+        <div class="table-container">
+            <table id="membersTable">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Life Number</th>
+                        <th>Gender</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Members != null && Model.Members.Any())
+                    {
+                        @foreach (var member in Model.Members)
+                        {
+                            <tr>
+                                <td>@member.FullName</td>
+                                <td>@(member.MemberNumber ?? "N/A")</td>
+                                <td>@member.Gender</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Information">
+                                            <i class="fas fa-edit"></i> Edit Information
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No data inputted</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (activeTab == "PositionHolder")
+    {
+        <!-- Position Holder Table -->
+        <div class="table-container">
+            <table id="positionHolderTable">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Life Number</th>
+                        <th>Position</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Members != null && Model.Members.Any())
+                    {
+                        @foreach (var member in Model.Members)
+                        {
+                            <tr>
+                                <td>@member.FullName</td>
+                                <td>@(member.MemberNumber ?? "N/A")</td>
+                                <td>@(member.Position ?? "N/A")</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="@Url.Action("Index", "Members")" class="btn btn-view" title="View Member">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        <a href="@Url.Action("Index", "Members")" class="btn btn-edit" title="Edit Position">
+                                            <i class="fas fa-edit"></i> Edit Position
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No data inputted</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model.Schedule == null)
     {
         <div class="text-center attendance-empty-message">
             <p>Please select a schedule to view attendance.</p>

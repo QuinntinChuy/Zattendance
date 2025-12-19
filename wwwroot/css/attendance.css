@@ -280,7 +280,7 @@
 
 /* Action Buttons - Updated for Members tab */
 .btn-view {
-    background: var(--success);
+    background: var(--wood-medium); /* Medium Oak #7A4A2E - secondary icons/actions */
     color: var(--wood-text-light);
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -296,7 +296,7 @@
 }
 
 .btn-view:hover {
-    background: #5a6b4a;
+    background: var(--wood-accent); /* Warm Light Wood #C19A6B - icon hover state */
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     color: var(--wood-text-light);
@@ -395,8 +395,8 @@ table thead th {
 
 /* Delete Button */
 .btn-delete {
-    background: #f56565;
-    color: white;
+    background: var(--danger); /* Reddish brown #8B5547 - danger/delete actions */
+    color: var(--wood-text-light);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     text-decoration: none;
@@ -411,10 +411,10 @@ table thead th {
 }
 
 .btn-delete:hover {
-    background: #e53e3e;
+    background: var(--wood-dark); /* Dark Walnut #4B2E1E - darker on hover for delete */
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: white;
+    color: var(--wood-text-light);
 }
 
 /* Add Group Name Modal Styles */
