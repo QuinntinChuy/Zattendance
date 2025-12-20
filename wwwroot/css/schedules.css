@@ -25,6 +25,22 @@
     color: var(--wood-text-light);
 }
 
+/* Override white text in Schedule Create/Edit forms */
+.card .form-group label {
+    color: var(--wood-text-dark) !important; /* Pure Black - form labels */
+}
+
+.card .form-text,
+.card small.text-muted {
+    color: var(--wood-text-dark) !important; /* Pure Black - helper text */
+    opacity: 0.7;
+}
+
+.card select.form-control,
+.card .form-control {
+    color: var(--wood-text-dark) !important; /* Pure Black - select and input text */
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .schedules-header {
